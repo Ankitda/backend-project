@@ -9,7 +9,7 @@ const userSchema = new Schema(
             required: true,
             unique: true,
             lowercase: true,
-            trim: true, 
+            trim: true,
             index: true
         },
         email: {
@@ -17,12 +17,12 @@ const userSchema = new Schema(
             required: true,
             unique: true,
             lowecase: true,
-            trim: true, 
+            trim: true,
         },
         fullName: {
             type: String,
             required: true,
-            trim: true, 
+            trim: true,
             index: true
         },
         avatar: {
@@ -52,21 +52,21 @@ const userSchema = new Schema(
     }
 )
 
-userSchema.pre("save", async function(next){
+userSchema.pre("save", async function (next) {
 
-    if(!this.isModified("password")) return next();
+    if (!this.isModified("password")) return next();
 
-   this.password = await bcrypt.hash(this.password.at, 10);
-   next();
+    this.password = await bcrypt.hash(this.password.at, 10);
+    next();
 
 });
 
-userSchema.methods.isPasswordCorrect = async function (password){
-    return await bcrypt.compare( password,this.password )
-} 
+userSchema.methods.isPasswordCorrect = async function (password) {
+    return await bcrypt.compare(password, this.password)
+}
 
 // generating access token for user
-userSchema.methods.generateAccessToken = function(){
+userSchema.methods.generateAccessToken = function () {
     return jwt.sign(
         {
             _id: this._id,
@@ -82,11 +82,11 @@ userSchema.methods.generateAccessToken = function(){
 }
 
 // generating refresh token for user
-userSchema.methods.generateRefreshToken = function(){
+userSchema.methods.generateRefreshToken = function () {
     return jwt.sign(
         {
             _id: this._id,
-            
+
         },
         process.env.REFRESH_TOKEN_SECRET,
         {
